@@ -11,6 +11,10 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.0",
     "svelte": "^5.39.4",
-    "vite": "^7.1.7"
+    "vite": "^7.1.10"
+  },
+  "dependencies": {
+    "flowbite": "^3.1.2",
+    "svelte-spa-router": "^4.0.1"
   }
 }
