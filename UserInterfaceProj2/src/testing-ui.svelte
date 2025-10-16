@@ -21,6 +21,9 @@
         <p style="margin:0">Remove Books</p>
     </div>
     <br/>
+    <input type="text" placeholder="Search..">
+    <br/>
+    <br/>
     <div style="display:flex; gap:8px;">
         <p>Sort by:</p>
         <select>
