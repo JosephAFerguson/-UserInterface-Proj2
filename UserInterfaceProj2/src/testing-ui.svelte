@@ -1,9 +1,12 @@
 <script>
+    function handleEyeClick() {
+        alert("Eye button clicked!");
+    }
 </script>
 
 <main>
     <br/>
-    <button id='eye-button'>
+    <button id='eye-button' on:click={handleEyeClick}>
         <img src="./public/eye.png" alt="Eye Icon" width="20" height="20"/>
     </button>
     <button id='info-button'>
@@ -14,12 +17,12 @@
     </div>
     <div style="display:flex; gap:8px;">
         <button type="button" id="add">+</button>
-        <p style="margin:0">Add Books</p>
+        <p style="margin:0" id="add-text">Add Books</p>
     </div>
     <br/>
     <div style="display:flex; gap:8px;">
         <button type="button" id="remove">-</button>
-        <p style="margin:0">Remove Books</p>
+        <p style="margin:0" id="remove-text">Remove Books</p>
     </div>
     <br/>
     <input type="text" placeholder="Search..">
@@ -62,5 +65,12 @@
 
     #add, #remove {
         border-radius: 50%;
+        width: 25px;
+        height: 25px;
+    }
+
+    #add-text, #remove-text {
+        align-items: center;
+        display: flex;
     }
 </style>
