@@ -1,11 +1,48 @@
 <script>
   import DeviceUI from './device-ui.svelte';
   import TestingUI from './testing-ui.svelte';
+  import DataDisplayUI from './data-display-ui.svelte';
+
+  let books_on_shelf = 
+  [
+    {
+      Title: "Sample Book",
+      Color: "Red",
+      Genre: "Fiction",
+      Pages: 300,
+      Synopsis: "This is a sample synopsis of the book.",
+      DateAdded: "2024-01-15",
+      LastRead: "2024-06-10"
+    },
+    {
+      Title: "Another Book",
+      Color: "Blue",
+      Genre: "Non-Fiction",
+      Pages: 250,
+      Synopsis: "This is another sample synopsis of a different book.",
+      DateAdded: "2024-02-20",
+      LastRead: "2024-05-22"
+    }
+  ];
+
+  let books_off_shelf = 
+  [
+    {
+      Title: "Third Book",
+      Color: "Green",
+      Genre: "Mystery",
+      Pages: 400,
+      Synopsis: "This is the synopsis of the third book.",
+      DateAdded: "2024-03-10",
+      LastRead: "2024-04-15"
+    }
+  ];
 </script>
 
 <div id="container"> 
-  <div id="device-ui"><DeviceUI/></div> 
-  <div id="testing-ui"><TestingUI/></div> 
+  <div id="device-ui"><DeviceUI bind:books_on_shelf bind:books_off_shelf/></div> 
+  <div id="data-display-ui"><DataDisplayUI bind:books_on_shelf bind:books_off_shelf/></div>
+  <div id="testing-ui"><TestingUI bind:books_on_shelf bind:books_off_shelf/></div> 
 </div>
 
 <style>

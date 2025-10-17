@@ -2,6 +2,9 @@
     function handleEyeClick() {
         alert("Eye button clicked!");
     }
+
+    export let books_on_shelf = [];
+    export let books_off_shelf = [];
 </script>
 
 <main>
@@ -23,19 +26,6 @@
     <div style="display:flex; gap:8px;">
         <button type="button" id="remove">-</button>
         <p style="margin:0" id="remove-text">Remove Books</p>
-    </div>
-    <br/>
-    <input type="text" placeholder="Search..">
-    <br/>
-    <br/>
-    <div style="display:flex; gap:8px;">
-        <p>Sort by:</p>
-        <select>
-            <option>None</option>
-            <option>A-Z</option>
-            <option>Z-A</option>
-            <option>Genre</option>
-        </select>
     </div>
     <br/>
     <button>Run Simulation</button>

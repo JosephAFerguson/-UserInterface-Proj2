@@ -1,5 +1,8 @@
 <script>
   import { onMount } from 'svelte'
+
+  export let books_on_shelf = [];
+  export let books_off_shelf = [];
 </script>
 
 <main>
