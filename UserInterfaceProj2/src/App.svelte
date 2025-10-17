@@ -12,7 +12,8 @@
       Pages: 300,
       Synopsis: "This is a sample synopsis of the book.",
       DateAdded: "2024-01-15",
-      LastRead: "2024-06-10"
+      LastRead: "2024-06-10",
+      TimesPulledOffShelf: 5
     },
     {
       Title: "Another Book",
@@ -21,7 +22,8 @@
       Pages: 250,
       Synopsis: "This is another sample synopsis of a different book.",
       DateAdded: "2024-02-20",
-      LastRead: "2024-05-22"
+      LastRead: "2024-05-22",
+      TimesPulledOffShelf: 3
     }
   ];
 
@@ -34,7 +36,8 @@
       Pages: 400,
       Synopsis: "This is the synopsis of the third book.",
       DateAdded: "2024-03-10",
-      LastRead: "2024-04-15"
+      LastRead: "2024-04-15",
+      TimesPulledOffShelf: 2
     }
   ];
 </script>

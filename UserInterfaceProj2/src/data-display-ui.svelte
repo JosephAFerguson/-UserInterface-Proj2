@@ -1,4 +1,21 @@
 <script>
+    export let books_on_shelf = [];
+    export let books_off_shelf = [];
+
+    $: totalBooksOnShelf = books_on_shelf.length;
+
+    $: allBooks = [...books_on_shelf, ...books_off_shelf];
+
+    $: totalGenres = Array.from(new Set(books_on_shelf.map(book => book.Genre)));
+
+    $: mostReadBook = allBooks.reduce((mostRead, book) => {
+        return (book.TimesPulledOffShelf > (mostRead?.TimesPulledOffShelf || 0)) ? book : mostRead;
+    }, null)?.Title || 'N/A';
+
+    $: oldestBook = allBooks.reduce((oldest, book) => {
+        return (new Date(book.DateAdded) < new Date(oldest?.DateAdded || Date.now())) ? book : oldest;
+    }, null)?.Title || 'N/A';
+
     function handleSearch(event) {
         const query = event.target.value;
         // Implement search functionality here
@@ -8,10 +25,11 @@
 <main>
     <div id ="data-display-panel">
         <h1>Metrics</h1>
-        <p>Number of Books: </p>
-        <p>Genres Available: </p>
-        <p>Average Reading Time: </p>
-        <p>Most Read Book: </p>
+        <p>Number of Books on Shelf: <strong>{totalBooksOnShelf}</strong></p>
+        <p>Genres Available: <strong>{totalGenres.join(', ')}</strong></p>
+        <p>Most Read Book: <strong>{mostReadBook}</strong></p>
+        <p>Oldest Book: <strong>{oldestBook}</strong></p>
+        <p>Books Off Shelf: <strong>{(books_off_shelf.map(book => book.Title)).join(', ')}</strong></p>
         <br/>
         <h1>Search Features</h1>
         <br/>
