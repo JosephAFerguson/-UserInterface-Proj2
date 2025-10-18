@@ -1,18 +1,18 @@
 <script>
     import { books_on_shelf, books_off_shelf } from './lib/bookStore.js';
-    import { get } from 'svelte/store';
 
     let shelfView = 'all';
-
     let sortOption = 'None';
-
     let searchQuery = '';
 
-    $: totalBooksOnShelf = get(books_on_shelf).length;
+    $: $books_on_shelf;
+    $: $books_off_shelf;
 
-    $: allBooks = [...get(books_on_shelf), ...get(books_off_shelf)];
+    $: totalBooksOnShelf = $books_on_shelf.length;
 
-    $: totalGenres = Array.from(new Set(get(books_on_shelf).map(book => book.Genre)));
+    $: allBooks = [...$books_on_shelf, ...$books_off_shelf];
+
+    $: totalGenres = Array.from(new Set($books_on_shelf.map(book => book.Genre)));
 
     $: mostReadBook = allBooks.reduce((mostRead, book) => {
         return (book.TimesPulledOffShelf > (mostRead?.TimesPulledOffShelf || 0)) ? book : mostRead;
@@ -23,8 +23,8 @@
     }, null)?.Title || 'N/A';
 
     $: filteredBooks = (() => {
-        const onShelf = get(books_on_shelf);
-        const offShelf = get(books_off_shelf);
+        const onShelf = $books_on_shelf;
+        const offShelf = $books_off_shelf;
 
         return [...allBooks]
             .filter(book => {
@@ -74,7 +74,7 @@
         <div class="metric-entry">Genres Available: <strong>{totalGenres.join(', ')}</strong></div>
         <div class="metric-entry">Most Read Book: <strong>{mostReadBook}</strong></div>
         <div class="metric-entry">Oldest Book: <strong>{oldestBook}</strong></div>
-        <div class="metric-entry">Books Off Shelf: <strong>{get(books_off_shelf).map(book => book.Title).join(', ')}</strong></div>
+        <div class="metric-entry">Books Off Shelf: <strong>{$books_off_shelf.map(book => book.Title).join(', ')}</strong></div>
 
 
         <br/>
@@ -101,37 +101,40 @@
         </div>
 
         {#if shelfView === 'all'}
-            {#if filteredBooks.filter(book => get(books_on_shelf).includes(book)).length > 0}
-                {#each filteredBooks.filter(book => get(books_on_shelf).includes(book)) as book}
+            {#if filteredBooks.filter(book => $books_on_shelf.includes(book)).length > 0}
+                {#each filteredBooks.filter(book => $books_on_shelf.includes(book)) as book}
                     <div class="book-entry">
                         <div class="book-title">
                             {book.Title}
                             ·
-                            <span class="book-status">On Shelf</span>
+                            <span class="book-status">{$books_on_shelf.includes(book) ? 'On Shelf' : 'Off Shelf'}</span>
                         </div>
                         <div class="book-details">
+                            Pulled: {book.TimesPulledOffShelf}x <br />
+                            Last Read: {book.LastRead || 'N/A'} <br />
                             {book.Genre} | {book.Color} | {book.Pages} pages  
                             <br />
-                            Added: {book.DateAdded} | Last Read: {book.LastRead || 'N/A'} | Pulled {book.TimesPulledOffShelf}x | 
-                            ISBN: {book.ISBN || 'N/A'} <br />
+                            Added: {book.DateAdded} | ISBN: {book.ISBN || 'N/A'} <br />
                         </div>
                     </div>
                 {/each}
             {/if}
 
-            {#if filteredBooks.filter(book => get(books_off_shelf).includes(book)).length > 0}
+            {#if filteredBooks.filter(book => $books_off_shelf.includes(book)).length > 0}
                 <h2 class="section-heading">Off Shelf</h2>
-                {#each filteredBooks.filter(book => get(books_off_shelf).includes(book)) as book}
+                {#each filteredBooks.filter(book => $books_off_shelf.includes(book)) as book}
                     <div class="book-entry">
                         <div class="book-title">
                             {book.Title}
                             ·
-                            <span class="book-status">Off Shelf</span>
+                            <span class="book-status">{$books_on_shelf.includes(book) ? 'On Shelf' : 'Off Shelf'}</span>
                         </div>
                         <div class="book-details">
+                            Pulled: {book.TimesPulledOffShelf}x <br />
+                            Last Read: {book.LastRead || 'N/A'} <br />
                             {book.Genre} | {book.Color} | {book.Pages} pages  
                             <br />
-                            Added: {book.DateAdded} | Last Read: {book.LastRead || 'N/A'} | Pulled {book.TimesPulledOffShelf}x
+                            Added: {book.DateAdded} | ISBN: {book.ISBN || 'N/A'} <br />
                         </div>
                     </div>
                 {/each}
@@ -148,33 +151,37 @@
                         {book.Title}
                         ·
                         <span class="book-status">
-                        {get(books_on_shelf).includes(book) ? 'On Shelf' : 'Off Shelf'}
+                        {$books_on_shelf.includes(book) ? 'On Shelf' : 'Off Shelf'}
                         </span>
                     </div>
-                    <div class="book-details">
-                        {book.Genre} | {book.Color} | {book.Pages} pages  
-                        <br />
-                        Added: {book.DateAdded} | Last Read: {book.LastRead || 'N/A'} | Pulled {book.TimesPulledOffShelf}x
-                    </div>
+                        <div class="book-details">
+                            Pulled: {book.TimesPulledOffShelf}x <br />
+                            Last Read: {book.LastRead || 'N/A'} <br />
+                            {book.Genre} | {book.Color} | {book.Pages} pages  
+                            <br />
+                            Added: {book.DateAdded} | ISBN: {book.ISBN || 'N/A'} <br />
+                        </div>
                     </div>
                 {/each}
                 {/each}
             {:else}
                 {#each filteredBooks as book}
-                <div class="book-entry">
-                    <div class="book-title">
-                    {book.Title}
-                    ·
-                    <span class="book-status">
-                        {get(books_on_shelf).includes(book) ? 'On Shelf' : 'Off Shelf'}
-                    </span>
+                    <div class="book-entry">
+                        <div class="book-title">
+                        {book.Title}
+                        ·
+                        <span class="book-status">
+                            {$books_on_shelf.includes(book) ? 'On Shelf' : 'Off Shelf'}
+                        </span>
+                        </div>
+                        <div class="book-details">
+                            Pulled: {book.TimesPulledOffShelf}x <br />
+                            Last Read: {book.LastRead || 'N/A'} <br />
+                        {book.Genre} | {book.Color} | {book.Pages} pages  
+                        <br />
+                        Added: {book.DateAdded} | ISBN: {book.ISBN || 'N/A'} <br />
+                        </div>
                     </div>
-                    <div class="book-details">
-                    {book.Genre} | {book.Color} | {book.Pages} pages  
-                    <br />
-                    Added: {book.DateAdded} | Last Read: {book.LastRead || 'N/A'} | Pulled {book.TimesPulledOffShelf}x
-                    </div>
-                </div>
                 {/each}
             {/if}
         {/if}

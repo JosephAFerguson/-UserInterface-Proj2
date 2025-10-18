@@ -123,6 +123,40 @@
         showEditForm = false;
     }
 
+    let simRunning = false;
+    let simInterval = null;
+
+    function simulateReadingOverTime() {
+        if (simRunning) return;
+        simRunning = true;
+
+        simInterval = setInterval(() => {
+            books_on_shelf.update(books => {
+                if (books.length === 0) return books;
+
+                const index = Math.floor(Math.random() * books.length);
+                const updatedBooks = [...books];
+
+                // up to 10 days ago
+                const offset = Math.floor(Math.random() * 10); 
+
+                updatedBooks[index] = {
+                    ...updatedBooks[index],
+                    LastRead: new Date(Date.now() - offset * 86400000).toISOString().slice(0, 10),
+                    TimesPulledOffShelf: updatedBooks[index].TimesPulledOffShelf + 1
+                };
+
+                return updatedBooks;
+            });
+        //every 1 second
+        }, 1000); 
+    }
+
+    function stopSimulation() {
+        clearInterval(simInterval);
+        simRunning = false;
+    }
+
 </script>
 
 <section class="control-panel">
@@ -209,7 +243,10 @@
     {/if}
 
     <br/>
-    <button>Run Simulation</button>
+    <div style="display:flex; gap:8px; align-items:center;">
+    <button on:click={simulateReadingOverTime}>Run Simulation</button>
+    <button on:click={stopSimulation}>Stop</button>
+    </div>
     <br/>
     <br/>
     <button  on:click={() => dispatch('goToDisplay')}>Go to Data Display</button>
