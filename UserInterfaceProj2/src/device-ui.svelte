@@ -1,19 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import BookSVG from './lib/SvgBook.svelte';
-
-  // ---- Static Books ----
   import NullBook from './assets/NullBook.svg';
-  import HarryPotter from './assets/HarryPotter.svg';
-  import GatheringBlue from './assets/GatheringBlue.svg';
-  import LesMiserables from './assets/LesMiserables.svg';
-
-  // ---- Static Books ----
-  export const svgFiles = {
-    "Harry Potter": HarryPotter,
-    "Gathering Blue": GatheringBlue,
-    "LesMisera bles": LesMiserables,
-  };
 
   const shelves = [1, 2, 3, 4];
   export let books_per_shelf = [
@@ -23,7 +11,6 @@
     ["", "", "", "", "", "", "", "", "", ""]
   ];
 
-  export let books_off_shelf = [];
 </script>
 
 <main>
