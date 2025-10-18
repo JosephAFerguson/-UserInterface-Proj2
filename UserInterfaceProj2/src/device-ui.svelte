@@ -1,7 +1,13 @@
 <script>
   import { books_per_shelf } from './lib/bookStore.js';
   import BookSVG from './lib/SvgBook.svelte';
+  import SvgLight from './lib/SvgLight.svelte';
   import NullBook from './assets/NullBook.svg';
+
+  function handleRemove(shelf, book) {
+    alert('Remove book feature not implemented yet.');
+    return () => {};
+  }
 </script>
 
 
@@ -12,17 +18,17 @@
         <div class="books">
           {#each shelf as book}
             {#if book}
-              <BookSVG title={book.title} color={book.color}/>
+              <BookSVG title={book.title} color={book.color} />
             {:else}
-              <img src={NullBook} alt="Empty slot" />
+              <!-- svelte-ignore a11y_click_events_have_key_events -->
+              <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+              <img src={NullBook} alt="Empty slot" on:click={handleRemove(shelf, book)} />
             {/if}
           {/each}
         </div>
         <div class="lights">
-          {#each Array(10) as _}
-            <svg width="20" height="20">
-              <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-            </svg>
+          {#each shelf as book}
+            <SvgLight color={book ? 'white' : 'gray'} character={book ? book.title.charAt(0) : '-'} />
           {/each}
         </div>
       </div>
@@ -34,13 +40,10 @@
   main {
     background-color: #563232;
     color: white;
-    width: 100%;
-    height: 95vh;
     margin: 1rem;
   }
   .shelves {
     display: grid;
-    width: 97.5%;
     height: 100%;
     grid-template-rows: repeat(4, 1fr);
     box-sizing: border-box;
@@ -53,19 +56,18 @@
 
   .books {
     display: grid;
-    width: 100%;
     height: 100%;
-    grid-template-columns: repeat(10, minmax(20px, 1fr));
+    width: 100%;
+    grid-template-columns: repeat(10, minmax(1%, 1fr));
     justify-self: center;
     justify-items: center;
     padding: 1rem;
-    margin: 0.4rem;
   }
   
   .books img,
   .books :global(svg) {
-    width:auto;
     height: 90%;
+    max-height: 90%;
     object-fit: contain;
   }
   
@@ -79,11 +81,15 @@
   .lights {
     display: grid;
     width: 100%;
-    grid-template-columns: repeat(10, minmax(20px, 1fr));
+    grid-template-columns: repeat(10, minmax(1%, 1fr));
     justify-self: center;
     justify-items: center;
-    gap: 1rem;
     align-items: center;
     background-color: #563232;
+  }
+
+  .lights :global(svg) {
+    height:100%;
+    object-fit: contain;
   }
 </style>
