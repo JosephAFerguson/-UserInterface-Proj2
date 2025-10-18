@@ -2,9 +2,9 @@
   import DeviceUI from './device-ui.svelte';
   import TestingUI from './testing-ui.svelte';
   import DataDisplayUI from './data-display-ui.svelte';
+  import { books_on_shelf, books_off_shelf } from './lib/bookStore.js';
 
-  let books_on_shelf = 
-  [
+  books_on_shelf.set([ 
     {
       Title: "Sample Book",
       Color: "Red",
@@ -25,10 +25,9 @@
       LastRead: "2024-05-22",
       TimesPulledOffShelf: 3
     }
-  ];
+  ]);
 
-  let books_off_shelf = 
-  [
+  books_off_shelf.set([
     {
       Title: "Third Book",
       Color: "Green",
@@ -39,7 +38,7 @@
       LastRead: "2024-04-15",
       TimesPulledOffShelf: 2
     }
-  ];
+  ]);
 </script>
 
 <div id="container"> 
