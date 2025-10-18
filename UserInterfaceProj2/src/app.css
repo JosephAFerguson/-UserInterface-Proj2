@@ -6,18 +6,17 @@ html, body {
 #container {
   display: grid;
   grid-template-columns: 1fr 0.5fr 0.5fr;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   margin: 0;
 }
 
-#device-ui {
-  background: #563232;
-  width: 100%;
+#device-ui,
+#data-display-ui,
+#testing-ui {
   height: 100%;
 }
 
-#testing-ui {
-  width: 100%;
-  height: 100%;
+#device-ui {
+  background: #563232;
 }
