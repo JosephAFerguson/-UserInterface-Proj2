@@ -198,7 +198,7 @@
         box-sizing: border-box;
     }
 
-    h1 {
+    h1, .section-heading {
         display: block;
         text-align: left;
         margin-left: 5%;
