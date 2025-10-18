@@ -680,15 +680,19 @@ const books_off_shelf_profiles = {
   4: []
 };
 
-// Derived store for the current profile's on-shelf books
-export const books_on_shelf = derived(user_profile, $user_profile => {
-  return books_on_shelf_profiles[$user_profile] || [];
-});
+// Writable store for the current profile's on-shelf books
+export const books_on_shelf = writable(books_on_shelf_profiles[1]);
+// Writable store for off-shelf books
+export const books_off_shelf = writable(books_off_shelf_profiles[1]);
 
-// Derived store for off-shelf books
-export const books_off_shelf = derived(user_profile, $user_profile => {
-  return books_off_shelf_profiles[$user_profile] || [];
-});
+export function setProfile(n) {
+  if (n >= 1 && n <= 4) {
+    user_profile.set(n);
+    books_on_shelf.set(books_on_shelf_profiles[n]);
+    books_off_shelf.set(books_off_shelf_profiles[n]);
+  }
+}
+
 // Grid layout derived store
 const shelves = 4;
 const spots_per_shelf = 10;
@@ -708,8 +712,3 @@ export const books_per_shelf = derived(books_on_shelf, ($books_on_shelf) => {
 
   return grid;
 });
-
-// Function to switch profile
-export function setProfile(n) {
-  if (n >= 1 && n <= 4) user_profile.set(n);
-}
