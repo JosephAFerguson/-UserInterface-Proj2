@@ -1,26 +1,18 @@
 <script>
-  import { onMount } from 'svelte';
+  import { books_per_shelf } from './lib/bookStore.js';
   import BookSVG from './lib/SvgBook.svelte';
   import NullBook from './assets/NullBook.svg';
-
-  const shelves = [1, 2, 3, 4];
-  export let books_per_shelf = [
-    ["Harry Potter", "", "", "", "", "", "", "", "", ""],
-    ["Gathering Blue", "Les Miserables", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", "", "", ""]
-  ];
-
 </script>
+
 
 <main>
   <div class="shelves">
-    {#each books_per_shelf as shelf}
+    {#each $books_per_shelf as shelf}
       <div class="shelf">
         <div class="books">
           {#each shelf as book}
             {#if book}
-              <BookSVG title={book} />
+              <BookSVG title={book.title} color={book.color}/>
             {:else}
               <img src={NullBook} alt="Empty slot" />
             {/if}
@@ -48,7 +40,7 @@
   }
   .shelves {
     display: grid;
-    width: 95%;
+    width: 97.5%;
     height: 100%;
     grid-template-rows: repeat(4, 1fr);
     box-sizing: border-box;
@@ -61,24 +53,37 @@
 
   .books {
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
+    width: 100%;
+    height: 100%;
+    grid-template-columns: repeat(10, minmax(20px, 1fr));
     justify-self: center;
-    gap: 1rem;
+    justify-items: center;
     padding: 1rem;
+    margin: 0.4rem;
+  }
+  
+  .books img,
+  .books :global(svg) {
+    width:auto;
+    height: 90%;
+    object-fit: contain;
+  }
+  
+  .books :global(svg):hover,
+  .books img:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+    cursor: pointer;
   }
 
   .lights {
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(10, minmax(20px, 1fr));
+    justify-self: center;
+    justify-items: center;
+    gap: 1rem;
     align-items: center;
     background-color: #563232;
   }
-
-  .books img {
-    width: 100%;  
-    height: 100%;
-    object-fit: contain;
-  }
-
-
 </style>
