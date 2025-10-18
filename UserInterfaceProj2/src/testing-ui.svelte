@@ -1,6 +1,7 @@
 <script>
-  function handleEyeClick() {
-    alert("Eye button clicked!");
+  import { books_on_shelf, books_off_shelf } from './lib/bookStore.js'
+  function goToDisplay() {
+    dispatchEvent(new CustomEvent('goToDisplay'));
   }
 
   let showInfoModal = false;
@@ -12,9 +13,159 @@
   function closeInfoModal() {
     showInfoModal = false;
   }
+    function handleEyeClick() {
+        alert("Eye button clicked!");
+    }
 
-  export let books_on_shelf = [];
-  export let books_off_shelf = [];
+    function addBook() {
+        books_on_shelf.update(books => [
+            ...books,
+            {
+                Title: "New Book",
+                Color: "Purple",
+                Genre: "Fantasy",
+                Pages: 320,
+                Synopsis: "A brand new story.",
+                DateAdded: new Date().toISOString().slice(0, 10),
+                LastRead: "",
+                TimesPulledOffShelf: 0
+            }
+        ]);
+    }
+
+    function removeBook() {
+        books_on_shelf.update(books => books.slice(0, -1));
+    }
+
+    let titleToRemove = '';
+    let showRemoveForm = false;
+
+    function removeBookByTitle() {
+        books_on_shelf.update(books => {
+            const index = books.findIndex(book => book.Title.toLowerCase() === titleToRemove.toLowerCase());
+            if (index !== -1) {
+                const updatedBooks = [...books];
+                const removed = updatedBooks.splice(index, 1)[0];
+                books_off_shelf.update(off => [...off, removed]);
+                return updatedBooks;
+            } else {
+                alert(`No book found with title: "${titleToRemove}"`);
+                return books;
+            }
+        });
+
+        titleToRemove = '';
+    }
+
+
+    let showForm = false;
+    let newTitle = '';
+    let newGenre = '';
+    let newColor = '';
+    let newPages = '';
+    let newISBN = '';
+
+    function submitNewBook() {
+        books_on_shelf.update(books => [
+            ...books,
+            {
+                Title: newTitle || 'Untitled',
+                Genre: newGenre || 'Unknown',
+                Color: newColor || 'Gray',
+                Pages: parseInt(newPages) || 0,
+                ISBN: newISBN || 'N/A',
+                Synopsis: '',
+                DateAdded: new Date().toISOString().slice(0, 10),
+                LastRead: '',
+                TimesPulledOffShelf: 0
+            }
+        ]);
+
+        // Optional: reset form
+        newTitle = newGenre = newColor = newISBN = '';
+        newPages = '';
+        showForm = false;
+    }
+
+    let showEditForm = false;
+    let searchTitle = '';
+    let editBook = null;
+
+    let editedTitle = '';
+    let editedGenre = '';
+    let editedColor = '';
+    let editedPages = '';
+    let editedISBN = '';
+
+    function loadBookForEditing() {
+        const book = $books_on_shelf.find(b => b.Title.toLowerCase() === searchTitle.toLowerCase());
+        if (book) {
+            editBook = book;
+            editedTitle = book.Title;
+            editedGenre = book.Genre;
+            editedColor = book.Color;
+            editedPages = book.Pages;
+            editedISBN = book.ISBN || '';
+        } else {
+            alert(`No book found with title: "${searchTitle}"`);
+            editBook = null;
+        }
+    }
+
+    function submitEdit() {
+        books_on_shelf.update(books => books.map(book => {
+            if (book.Title === editBook.Title) {
+                return {
+                    ...book,
+                    Title: editedTitle || book.Title,
+                    Genre: editedGenre || book.Genre,
+                    Color: editedColor || book.Color,
+                    Pages: parseInt(editedPages) || book.Pages,
+                    ISBN: editedISBN || 'N/A'
+                };
+            }
+            return book;
+        }));
+
+        //reset
+        editBook = null;
+        searchTitle = '';
+        showEditForm = false;
+    }
+
+    let simRunning = false;
+    let simInterval = null;
+
+    function simulateReadingOverTime() {
+        if (simRunning) return;
+        simRunning = true;
+
+        simInterval = setInterval(() => {
+            books_on_shelf.update(books => {
+                if (books.length === 0) return books;
+
+                const index = Math.floor(Math.random() * books.length);
+                const updatedBooks = [...books];
+
+                // up to 10 days ago
+                const offset = Math.floor(Math.random() * 10); 
+
+                updatedBooks[index] = {
+                    ...updatedBooks[index],
+                    LastRead: new Date(Date.now() - offset * 86400000).toISOString().slice(0, 10),
+                    TimesPulledOffShelf: updatedBooks[index].TimesPulledOffShelf + 1
+                };
+
+                return updatedBooks;
+            });
+        //every 1 second
+        }, 1000); 
+    }
+
+    function stopSimulation() {
+        clearInterval(simInterval);
+        simRunning = false;
+    }
 </script>
 
 <main>
@@ -31,22 +182,81 @@
     />
   </button>
   <div style="display:flex; align-items:center; width:90%;">
-    <h1>Testing UI</h1>
-  </div>
-  <div style="display:flex; gap:8px;">
-    <button type="button" id="add">+</button>
-    <p style="margin:0" id="add-text">Add Books</p>
-  </div>
-  <br />
-  <div style="display:flex; gap:8px;">
-    <button type="button" id="remove">-</button>
-    <p style="margin:0" id="remove-text">Remove Books</p>
-  </div>
-  <br />
-  <button>Run Simulation</button>
-  <br />
-  <br />
-  <button>Go to Data Display</button>
+        <h1>Testing UI</h1>
+    </div>
+    
+    <div>
+        <div style="display:flex; gap:8px;">
+            <button type="button" id="add" on:click={() =>  showForm = ! showForm}>+</button>
+            <p style="margin:0" id="add-text">{showForm ? 'Cancel' : 'Add Book'}</p>
+        </div>
+
+
+        {#if showForm}
+            <div class="book-form">
+                <input bind:value={newTitle} placeholder="Title" />
+                <select bind:value={newGenre}>
+                    <option value="">Select Genre</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Mystery">Mystery</option>
+                    <option value="Non-Fiction">Non-Fiction</option>
+                    <option value="Classic">Classic</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input bind:value={newColor} placeholder="Color" />
+                <input type="number" bind:value={newPages} placeholder="Pages" min="1" />
+                <input bind:value={newISBN} placeholder="ISBN" />
+                <button on:click={submitNewBook}>Submit</button>
+            </div>
+        {/if}
+    </div>
+
+
+    <br/>
+    <div style="display:flex; gap:8px;">
+        <button type="button" id="remove" on:click={() => showRemoveForm = !showRemoveForm}>-</button>
+        <p style="margin:0" id="remove-text">{showRemoveForm ? 'Cancel Remove' : 'Remove Books'}</p>
+    </div>
+    {#if showRemoveForm}
+        <div class="book-form">
+            <input bind:value={titleToRemove} placeholder="Title to remove" />
+            <button on:click={removeBookByTitle}>Remove by Title</button>
+        </div>
+    {/if}
+
+    <br>
+
+
+    <div style="display:flex; gap:8px;">
+        <button type="button" id="edit" on:click={() => showEditForm = !showEditForm}>✎</button>
+        <p style="margin:0">{showEditForm ? 'Cancel Edit' : 'Edit Book'}</p>
+    </div>
+
+    {#if showEditForm}
+        <div class="book-form">
+            {#if !editBook}
+                <input bind:value={searchTitle} placeholder="Search title to edit" />
+                <button on:click={loadBookForEditing}>Load Book</button>
+            {:else}
+                <input bind:value={editedTitle} placeholder="New Title" />
+                <input bind:value={editedGenre} placeholder="New Genre" />
+                <input bind:value={editedColor} placeholder="New Color" />
+                <input type="number" bind:value={editedPages} placeholder="New Pages" />
+                <input bind:value={editedISBN} placeholder="New ISBN" />
+                <button on:click={submitEdit}>Submit Changes</button>
+            {/if}
+        </div>
+    {/if}
+
+    <br/>
+    <div style="display:flex; gap:8px; align-items:center;">
+    <button on:click={simulateReadingOverTime}>Run Simulation</button>
+    <button on:click={stopSimulation}>Stop</button>
+    </div>
+    <br/>
+    <br/>
+    <button on:click={goToDisplay}>Go to Data Display</button>
 </main>
 
 {#if showInfoModal}
@@ -77,42 +287,136 @@
     </div>
   </div>
 {/if}
-
 <style>
-  main {
-    margin-left: 5%;
-  }
+/* === Layout and General === */
+main {
+  margin-left: 5%;
+}
 
-  button,
-  select {
-    cursor: pointer;
-  }
+:global(html), :global(body) {
+  background-color: #f5f2eb; /* parchment tone */
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 
-  #eye-button,
-  #info-button {
-    background: none;
-    border: none;
-  }
+button, select, input, label, p, h1, h2, h3, h4, h5, h6 {
+  color: #3A2322;
+  font-family: 'Georgia', serif;
+  cursor: pointer;
+}
 
-  #info-button {
-    float: right;
-    margin-right: 5%;
-  }
+/* === Top Buttons (Eye, Info) === */
+#eye-button,
+#info-button {
+  background-color: #d8b4a0;
+  border: none;
+  border-radius: 10px;
+  padding: 0.4rem 0.6rem;
+  margin: 0.2rem;
+}
 
-  #add,
-  #remove {
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-  }
+#info-button {
+  float: right;
+  margin-right: 5%;
+}
 
-  #add-text,
-  #remove-text {
-    align-items: center;
-    display: flex;
-  }
+/* === Control Buttons (Add, Remove, Edit) === */
+#add,
+#remove,
+#edit {
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  border: none;
+  background-color: #d8b4a0;
+  color: #3A2322;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: 0.2s ease;
+}
 
-  .modal-overlay {
+#add:hover,
+#remove:hover,
+#edit:hover {
+  background-color: #c49a85;
+}
+
+#add-text,
+#remove-text,
+p {
+  align-items: center;
+  display: flex;
+  color: #3A2322;
+  font-weight: bold;
+}
+
+/* === Forms === */
+.book-form {
+  margin: 1rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.book-form input,
+.book-form select {
+  padding: 0.5rem;
+  border: 1px solid #d3c3b5;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #3A2322;
+  font-family: inherit;
+}
+
+.book-form input::placeholder {
+  color: #999;
+}
+
+.book-form input:focus,
+.book-form select:focus {
+  outline: none;
+  border-color: #c49a85;
+  box-shadow: 0 0 5px rgba(196, 154, 133, 0.4);
+}
+
+/* === Generic Buttons (not control or icon buttons) === */
+button:not(#add):not(#remove):not(#edit):not(#eye-button):not(#info-button) {
+  background-color: #d8b4a0;
+  color: #3A2322;
+  border: none;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: 0.2s ease;
+}
+
+button:not(#add):not(#remove):not(#edit):not(#eye-button):not(#info-button):hover {
+  background-color: #c49a85;
+}
+
+/* === Headings === */
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #d8b4a0;
+  padding-bottom: 0.5rem;
+}
+
+/* === Control Panel === */
+.control-panel {
+  background-color: #f5f2eb;
+  color: #3A2322;
+  margin: 2rem;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  font-family: 'Georgia', serif;
+  max-width: 400px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+}
+
+/* === Modal Styles === */
+.modal-overlay {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -183,5 +487,8 @@
   font-weight: 600;
 }
 
-
+.close-btn:hover {
+  background-color: #73400f;
+}
 </style>
+
