@@ -112,7 +112,8 @@
                         <div class="book-details">
                             {book.Genre} | {book.Color} | {book.Pages} pages  
                             <br />
-                            Added: {book.DateAdded} | Last Read: {book.LastRead || 'N/A'} | Pulled {book.TimesPulledOffShelf}x
+                            Added: {book.DateAdded} | Last Read: {book.LastRead || 'N/A'} | Pulled {book.TimesPulledOffShelf}x | 
+                            ISBN: {book.ISBN || 'N/A'} <br />
                         </div>
                     </div>
                 {/each}
