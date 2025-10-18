@@ -2,6 +2,7 @@
   // Stores are passed in as props from `App.svelte` (they are Svelte writables)
   // Do not provide defaults here; App.svelte binds real writable store objects.
   import { books_on_shelf } from './lib/bookStore.js';
+  import { user_profile, setProfile } from './lib/bookStore.js';
   export let books_off_shelf;
 
   // Local UI state
@@ -156,6 +157,13 @@
     simRunning = false;
   }
 
+  const profileNames = {
+    1: 'Joe',
+    2: 'Joseph',
+    3: 'Joanne',
+    4: 'Eli'
+  };
+
 </script>
 
 <main>
@@ -173,6 +181,16 @@
   </button>
   <div style="display:flex; align-items:center; width:90%;">
     <h1>Testing UI</h1>
+  </div>
+
+  <div class="profile-section">
+    <p style="margin: 0; font-weight: bold;">Active Profile: {profileNames[$user_profile]}</p>
+    <div class="profile-buttons">
+      <button class:selected={$user_profile === 1} on:click={() => setProfile(1)}>Joe</button>
+      <button class:selected={$user_profile === 2} on:click={() => setProfile(2)}>Joseph</button>
+      <button class:selected={$user_profile === 3} on:click={() => setProfile(3)}>Joanne</button>
+      <button class:selected={$user_profile === 4} on:click={() => setProfile(4)}>Eli</button>
+    </div>
   </div>
     
   <div>
@@ -274,7 +292,8 @@
 <style>
 /* === Layout and General === */
 main {
-  margin-left: 5%;
+  padding: 2rem;
+  margin: 0;
 }
 
 :global(html), :global(body) {
@@ -473,6 +492,28 @@ h1 {
 
 .close-btn:hover {
   background-color: #73400f;
+}
+
+.profile-section {
+  margin-bottom: 1rem;
+}
+
+.profile-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 0.5rem;
+}
+
+.profile-buttons button.selected {
+  background-color: #b38a74;
+  font-weight: bold;
+  box-shadow: 0 0 0 2px #3A2322 inset;
+  color: #fff;
+}
+
+.profile-buttons button {
+  transition: all 0.2s ease;
 }
 </style>
 
