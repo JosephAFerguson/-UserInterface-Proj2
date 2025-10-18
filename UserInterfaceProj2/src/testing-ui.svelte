@@ -132,6 +132,7 @@
     simRunning = true;
 
     simInterval = setInterval(() => {
+      // @ts-ignore
       books_on_shelf.update(books => {
         if (books.length === 0) return books;
 
