@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="6.3783798mm"
+   height="21.632389mm"
+   viewBox="0 0 6.3783798 21.632389"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="GatheringBlue.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="5.8810095"
+     inkscape:cx="16.833845"
+     inkscape:cy="46.930718"
+     inkscape:window-width="1150"
+     inkscape:window-height="1186"
+     inkscape:window-x="3314"
+     inkscape:window-y="95"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs1" />
+  <g
+     id="g1"
+     transform="translate(-101.81081,-109.00833)">
+    <path
+       id="rect1"
+       style="fill:#00719f;fill-opacity:1;stroke-width:0.264583"
+       d="m 101.81877,109.00833 h 6.36246 v 21.63239 h -6.36246 z" />
+    <path
+       id="rect2"
+       style="stroke-width:0.264583"
+       d="m 101.81081,109.90703 h 6.37838 v 0.2704 h -6.37838 z" />
+    <path
+       id="rect2-8"
+       style="stroke-width:0.264583"
+       d="m 101.81081,129.38464 h 6.37838 v 0.27041 h -6.37838 z" />
+    <text
+       xml:space="preserve"
+       style="font-size:2.32577px;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#1a1a1a;fill-opacity:1;stroke-width:0.193814"
+       x="111.44874"
+       y="-104.01587"
+       id="text1"
+       transform="rotate(89.842003)"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         style="fill:#1a1a1a;stroke-width:0.193814"
+         x="111.44874"
+         y="-104.01587">Gathering Blue</tspan></text>
+  </g>
+</svg>

@@ -1,153 +1,53 @@
 <script>
-  import { onMount } from 'svelte'
+  import { onMount } from 'svelte';
+  import BookSVG from './lib/SvgBook.svelte';
 
-  export let books_on_shelf = [];
+  // ---- Static Books ----
+  import NullBook from './assets/NullBook.svg';
+  import HarryPotter from './assets/HarryPotter.svg';
+  import GatheringBlue from './assets/GatheringBlue.svg';
+  import LesMiserables from './assets/LesMiserables.svg';
+
+  // ---- Static Books ----
+  export const svgFiles = {
+    "Harry Potter": HarryPotter,
+    "Gathering Blue": GatheringBlue,
+    "LesMisera bles": LesMiserables,
+  };
+
+  const shelves = [1, 2, 3, 4];
+  export let books_per_shelf = [
+    ["Harry Potter", "", "", "", "", "", "", "", "", ""],
+    ["Gathering Blue", "Les Miserables", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", "", ""]
+  ];
+
   export let books_off_shelf = [];
 </script>
 
 <main>
-  <div id="shelves">
-    <div id="shelf-1">
-      <div id="books-1">
+  <div class="shelves">
+    {#each books_per_shelf as shelf}
+      <div class="shelf">
+        <div class="books">
+          {#each shelf as book}
+            {#if book}
+              <BookSVG title={book} />
+            {:else}
+              <img src={NullBook} alt="Empty slot" />
+            {/if}
+          {/each}
+        </div>
+        <div class="lights">
+          {#each Array(10) as _}
+            <svg width="20" height="20">
+              <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
+            </svg>
+          {/each}
+        </div>
       </div>
-      <div id="lights-1">
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-      </div>
-    </div>
-    <div id="shelf-2">
-      <div id="books-2"></div>
-      <div id="lights-2">
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-      </div>
-    </div>
-    <div id="shelf-3">
-      <div id="books-3"></div>
-      <div id="lights-3">
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-      </div>
-    </div>
-    <div id="shelf-4">
-      <div id="books-4"></div>
-      <div id="lights-4">
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-        <svg width="20" height="20">
-          <circle cx="10" cy="10" r="8" stroke="white" fill="white" />
-        </svg>
-      </div>
-    </div>
+    {/each}
   </div>
 </main>
 
@@ -156,35 +56,42 @@
     background-color: #563232;
     color: white;
     width: 100%;
-    height: 100vh;
-    overflow: hidden;
+    height: 95vh;
+    margin: 1rem;
+  }
+  .shelves {
+    display: grid;
+    width: 95%;
+    height: 100%;
+    grid-template-rows: repeat(4, 1fr);
     box-sizing: border-box;
   }
-  #shelves {
-    height: 94%;
-    margin-top: 3%;
-    margin-bottom: 3%;
-    margin-left: 3%;
-    margin-right: 3%;
-  }
-
-  #shelf-1, #shelf-2, #shelf-3, #shelf-4 {
-    width: 100%;
-    height: 25%;
+  .shelf {
+    display: grid;
+    grid-template-rows: 85% 15%;
     background-color: black;
   }
 
-  #books-1, #books-2, #books-3, #books-4 {
-    height: 85%;
-    width: full;
+  .books {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    justify-self: center;
+    gap: 1rem;
+    padding: 1rem;
   }
 
-  #lights-1, #lights-2, #lights-3, #lights-4 {
-    height: 15%;
-    width: full;
-    background-color: #563232;
+  .lights {
     display: flex;
-    align-items: center;
     justify-content: space-evenly;
+    align-items: center;
+    background-color: #563232;
   }
+
+  .books img {
+    width: 100%;  
+    height: 100%;
+    object-fit: contain;
+  }
+
+
 </style>
