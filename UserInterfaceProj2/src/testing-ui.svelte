@@ -115,26 +115,72 @@
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
   }
 
   .modal-window {
-    background: #fff;
-    color: #111;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 400px;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    color: #1a1a1a;
+    padding: 32px;
+    border-radius: 20px;
+    max-width: 480px;
     width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   }
 
   .modal-window h2 {
     text-align: center;
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 14px;
-    color: #333;
+    margin: 0 0 24px 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .modal-window ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px 0;
+  }
+
+  .modal-window li {
+    margin: 0 0 16px 0;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+  }
+
+  .modal-window li:last-child {
+    margin-bottom: 0;
+  }
+
+  .modal-window li b {
+    color: #8B4513;
+    font-weight: 600;
+    min-width: 140px;
+  }
+
+  .close-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 14px 32px;
+    background: #8B4513;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .close-btn:hover {
+    background: #A0522D;
   }
 </style>
