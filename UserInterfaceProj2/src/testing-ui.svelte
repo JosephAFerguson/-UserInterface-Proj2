@@ -183,7 +183,5 @@
   font-weight: 600;
 }
 
-.close-btn:hover {
-  background: #A0522D;
-}
+
 </style>
