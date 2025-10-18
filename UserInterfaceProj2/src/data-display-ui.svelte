@@ -209,7 +209,7 @@
     }
 
     #data-display-panel {
-        height: 67%;
+        height: 95vh;
         overflow-y: auto;
         padding: 20px;
         margin: 5% 6%;

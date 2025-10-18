@@ -1,11 +1,33 @@
 <script>
-  import { books_on_shelf, books_off_shelf } from './lib/bookStore.js'
-  function goToDisplay() {
-    dispatchEvent(new CustomEvent('goToDisplay'));
-  }
+  // Stores are passed in as props from `App.svelte` (they are Svelte writables)
+  // Do not provide defaults here; App.svelte binds real writable store objects.
+  export let books_on_shelf;
+  export let books_off_shelf;
 
+  // Local UI state
   let showInfoModal = false;
+  let showForm = false;
+  let showRemoveForm = false;
+  let showEditForm = false;
 
+  // Form fields for add / edit / remove
+  let newTitle = '';
+  let newGenre = '';
+  let newColor = '';
+  let newPages = '';
+  let newISBN = '';
+
+  let titleToRemove = '';
+
+  let searchTitle = '';
+  let editBook = null;
+  let editedTitle = '';
+  let editedGenre = '';
+  let editedColor = '';
+  let editedPages = '';
+  let editedISBN = '';
+
+  // Modal controls
   function handleInfoButtonClick() {
     showInfoModal = true;
   }
@@ -13,159 +35,148 @@
   function closeInfoModal() {
     showInfoModal = false;
   }
-    function handleEyeClick() {
-        alert("Eye button clicked!");
+
+  // Eye icon action (kept simple for testing)
+  function handleEyeClick() {
+    alert('Eye button clicked!');
+  }
+
+  // Add a sample new book to the on-shelf store
+  function addBook() {
+    books_on_shelf.update(books => [
+      ...books,
+      {
+        Title: 'New Book',
+        Color: 'Purple',
+        Genre: 'Fantasy',
+        Pages: 320,
+        Synopsis: 'A brand new story.',
+        DateAdded: new Date().toISOString().slice(0, 10),
+        LastRead: '',
+        TimesPulledOffShelf: 0
+      }
+    ]);
+  }
+
+  // Remove the last book from the on-shelf store
+  function removeBook() {
+    books_on_shelf.update(books => books.slice(0, -1));
+  }
+
+  // Remove a book by title and move it to off-shelf
+  function removeBookByTitle() {
+    books_on_shelf.update(books => {
+      const index = books.findIndex(book => book.Title.toLowerCase() === titleToRemove.toLowerCase());
+      if (index !== -1) {
+        const updatedBooks = [...books];
+        const removed = updatedBooks.splice(index, 1)[0];
+        books_off_shelf.update(off => [...off, removed]);
+        return updatedBooks;
+      } else {
+        alert(`No book found with title: "${titleToRemove}"`);
+        return books;
+      }
+    });
+
+    titleToRemove = '';
+  }
+
+  // Submit a new book using the Add form fields
+  function submitNewBook() {
+    books_on_shelf.update(books => [
+      ...books,
+      {
+        Title: newTitle || 'Untitled',
+        Genre: newGenre || 'Unknown',
+        Color: newColor || 'Gray',
+        Pages: parseInt(newPages) || 0,
+        ISBN: newISBN || 'N/A',
+        Synopsis: '',
+        DateAdded: new Date().toISOString().slice(0, 10),
+        LastRead: '',
+        TimesPulledOffShelf: 0
+      }
+    ]);
+
+    // Reset form
+    newTitle = newGenre = newColor = newISBN = '';
+    newPages = '';
+    showForm = false;
+  }
+
+  // Load a book into the edit form by searching title
+  function loadBookForEditing() {
+    const book = $books_on_shelf.find(b => b.Title.toLowerCase() === searchTitle.toLowerCase());
+    if (book) {
+      editBook = book;
+      editedTitle = book.Title;
+      editedGenre = book.Genre;
+      editedColor = book.Color;
+      // ensure editedPages (bound to an <input>) is a string
+      editedPages = String(book.Pages);
+      editedISBN = book.ISBN || '';
+    } else {
+      alert(`No book found with title: "${searchTitle}"`);
+      editBook = null;
     }
+  }
 
-    function addBook() {
-        books_on_shelf.update(books => [
-            ...books,
-            {
-                Title: "New Book",
-                Color: "Purple",
-                Genre: "Fantasy",
-                Pages: 320,
-                Synopsis: "A brand new story.",
-                DateAdded: new Date().toISOString().slice(0, 10),
-                LastRead: "",
-                TimesPulledOffShelf: 0
-            }
-        ]);
-    }
+  // Submit changes from the edit form
+  function submitEdit() {
+    if (!editBook) return;
 
-    function removeBook() {
-        books_on_shelf.update(books => books.slice(0, -1));
-    }
+    books_on_shelf.update(books => books.map(book => {
+      if (book.Title === editBook.Title) {
+        return {
+          ...book,
+          Title: editedTitle || book.Title,
+          Genre: editedGenre || book.Genre,
+          Color: editedColor || book.Color,
+          Pages: parseInt(editedPages) || book.Pages,
+          ISBN: editedISBN || 'N/A'
+        };
+      }
+      return book;
+    }));
 
-    let titleToRemove = '';
-    let showRemoveForm = false;
+    // Reset edit state
+    editBook = null;
+    searchTitle = '';
+    showEditForm = false;
+  }
 
-    function removeBookByTitle() {
-        books_on_shelf.update(books => {
-            const index = books.findIndex(book => book.Title.toLowerCase() === titleToRemove.toLowerCase());
-            if (index !== -1) {
-                const updatedBooks = [...books];
-                const removed = updatedBooks.splice(index, 1)[0];
-                books_off_shelf.update(off => [...off, removed]);
-                return updatedBooks;
-            } else {
-                alert(`No book found with title: "${titleToRemove}"`);
-                return books;
-            }
-        });
+  // Simulation state: periodically update LastRead and TimesPulledOffShelf
+  let simRunning = false;
+  let simInterval = null;
 
-        titleToRemove = '';
-    }
+  function simulateReadingOverTime() {
+    if (simRunning) return;
+    simRunning = true;
 
+    simInterval = setInterval(() => {
+      books_on_shelf.update(books => {
+        if (books.length === 0) return books;
 
-    let showForm = false;
-    let newTitle = '';
-    let newGenre = '';
-    let newColor = '';
-    let newPages = '';
-    let newISBN = '';
+        const index = Math.floor(Math.random() * books.length);
+        const updatedBooks = [...books];
+        const offset = Math.floor(Math.random() * 10); // up to 10 days
 
-    function submitNewBook() {
-        books_on_shelf.update(books => [
-            ...books,
-            {
-                Title: newTitle || 'Untitled',
-                Genre: newGenre || 'Unknown',
-                Color: newColor || 'Gray',
-                Pages: parseInt(newPages) || 0,
-                ISBN: newISBN || 'N/A',
-                Synopsis: '',
-                DateAdded: new Date().toISOString().slice(0, 10),
-                LastRead: '',
-                TimesPulledOffShelf: 0
-            }
-        ]);
+        updatedBooks[index] = {
+          ...updatedBooks[index],
+          LastRead: new Date(Date.now() - offset * 86400000).toISOString().slice(0, 10),
+          TimesPulledOffShelf: (updatedBooks[index].TimesPulledOffShelf || 0) + 1
+        };
 
-        // Optional: reset form
-        newTitle = newGenre = newColor = newISBN = '';
-        newPages = '';
-        showForm = false;
-    }
+        return updatedBooks;
+      });
+    }, 1000); // every 1 second
+  }
 
-    let showEditForm = false;
-    let searchTitle = '';
-    let editBook = null;
+  function stopSimulation() {
+    clearInterval(simInterval);
+    simRunning = false;
+  }
 
-    let editedTitle = '';
-    let editedGenre = '';
-    let editedColor = '';
-    let editedPages = '';
-    let editedISBN = '';
-
-    function loadBookForEditing() {
-        const book = $books_on_shelf.find(b => b.Title.toLowerCase() === searchTitle.toLowerCase());
-        if (book) {
-            editBook = book;
-            editedTitle = book.Title;
-            editedGenre = book.Genre;
-            editedColor = book.Color;
-            editedPages = book.Pages;
-            editedISBN = book.ISBN || '';
-        } else {
-            alert(`No book found with title: "${searchTitle}"`);
-            editBook = null;
-        }
-    }
-
-    function submitEdit() {
-        books_on_shelf.update(books => books.map(book => {
-            if (book.Title === editBook.Title) {
-                return {
-                    ...book,
-                    Title: editedTitle || book.Title,
-                    Genre: editedGenre || book.Genre,
-                    Color: editedColor || book.Color,
-                    Pages: parseInt(editedPages) || book.Pages,
-                    ISBN: editedISBN || 'N/A'
-                };
-            }
-            return book;
-        }));
-
-        //reset
-        editBook = null;
-        searchTitle = '';
-        showEditForm = false;
-    }
-
-    let simRunning = false;
-    let simInterval = null;
-
-    function simulateReadingOverTime() {
-        if (simRunning) return;
-        simRunning = true;
-
-        simInterval = setInterval(() => {
-            books_on_shelf.update(books => {
-                if (books.length === 0) return books;
-
-                const index = Math.floor(Math.random() * books.length);
-                const updatedBooks = [...books];
-
-                // up to 10 days ago
-                const offset = Math.floor(Math.random() * 10); 
-
-                updatedBooks[index] = {
-                    ...updatedBooks[index],
-                    LastRead: new Date(Date.now() - offset * 86400000).toISOString().slice(0, 10),
-                    TimesPulledOffShelf: updatedBooks[index].TimesPulledOffShelf + 1
-                };
-
-                return updatedBooks;
-            });
-        //every 1 second
-        }, 1000); 
-    }
-
-    function stopSimulation() {
-        clearInterval(simInterval);
-        simRunning = false;
-    }
 </script>
 
 <main>
@@ -179,84 +190,79 @@
       alt="Info Icon"
       width="20"
       height="20"
-    />
+  />
   </button>
   <div style="display:flex; align-items:center; width:90%;">
-        <h1>Testing UI</h1>
-    </div>
+    <h1>Testing UI</h1>
+  </div>
     
-    <div>
-        <div style="display:flex; gap:8px;">
-            <button type="button" id="add" on:click={() =>  showForm = ! showForm}>+</button>
-            <p style="margin:0" id="add-text">{showForm ? 'Cancel' : 'Add Book'}</p>
-        </div>
+  <div>
+  <div style="display:flex; gap:8px;">
+    <button type="button" id="add" on:click={() =>  showForm = ! showForm}>+</button>
+    <p style="margin:0" id="add-text">{showForm ? 'Cancel' : 'Add Book'}</p>
+  </div>
 
-
-        {#if showForm}
-            <div class="book-form">
-                <input bind:value={newTitle} placeholder="Title" />
-                <select bind:value={newGenre}>
-                    <option value="">Select Genre</option>
-                    <option value="Fantasy">Fantasy</option>
-                    <option value="Sci-Fi">Sci-Fi</option>
-                    <option value="Mystery">Mystery</option>
-                    <option value="Non-Fiction">Non-Fiction</option>
-                    <option value="Classic">Classic</option>
-                    <option value="Other">Other</option>
-                </select>
-                <input bind:value={newColor} placeholder="Color" />
-                <input type="number" bind:value={newPages} placeholder="Pages" min="1" />
-                <input bind:value={newISBN} placeholder="ISBN" />
-                <button on:click={submitNewBook}>Submit</button>
-            </div>
-        {/if}
-    </div>
-
-
-    <br/>
-    <div style="display:flex; gap:8px;">
-        <button type="button" id="remove" on:click={() => showRemoveForm = !showRemoveForm}>-</button>
-        <p style="margin:0" id="remove-text">{showRemoveForm ? 'Cancel Remove' : 'Remove Books'}</p>
-    </div>
-    {#if showRemoveForm}
-        <div class="book-form">
-            <input bind:value={titleToRemove} placeholder="Title to remove" />
-            <button on:click={removeBookByTitle}>Remove by Title</button>
-        </div>
+    {#if showForm}
+      <div class="book-form">
+        <input bind:value={newTitle} placeholder="Title" />
+        <select bind:value={newGenre}>
+          <option value="">Select Genre</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Sci-Fi">Sci-Fi</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Non-Fiction">Non-Fiction</option>
+          <option value="Classic">Classic</option>
+          <option value="Other">Other</option>
+        </select>
+        <input bind:value={newColor} placeholder="Color" />
+        <input type="number" bind:value={newPages} placeholder="Pages" min="1" />
+        <input bind:value={newISBN} placeholder="ISBN" />
+        <button on:click={submitNewBook}>Submit</button>
+      </div>
     {/if}
+  </div>
 
-    <br>
-
-
-    <div style="display:flex; gap:8px;">
-        <button type="button" id="edit" on:click={() => showEditForm = !showEditForm}>✎</button>
-        <p style="margin:0">{showEditForm ? 'Cancel Edit' : 'Edit Book'}</p>
+  <br/>
+  <div style="display:flex; gap:8px;">
+    <button type="button" id="remove" on:click={() => showRemoveForm = !showRemoveForm}>-</button>
+    <p style="margin:0" id="remove-text">{showRemoveForm ? 'Cancel Remove' : 'Remove Books'}</p>
+  </div>
+  {#if showRemoveForm}
+    <div class="book-form">
+      <input bind:value={titleToRemove} placeholder="Title to remove" />
+      <button on:click={removeBookByTitle}>Remove by Title</button>
     </div>
+  {/if}
+  <br>
 
-    {#if showEditForm}
-        <div class="book-form">
-            {#if !editBook}
-                <input bind:value={searchTitle} placeholder="Search title to edit" />
-                <button on:click={loadBookForEditing}>Load Book</button>
-            {:else}
-                <input bind:value={editedTitle} placeholder="New Title" />
-                <input bind:value={editedGenre} placeholder="New Genre" />
-                <input bind:value={editedColor} placeholder="New Color" />
-                <input type="number" bind:value={editedPages} placeholder="New Pages" />
-                <input bind:value={editedISBN} placeholder="New ISBN" />
-                <button on:click={submitEdit}>Submit Changes</button>
-            {/if}
-        </div>
-    {/if}
+  <div style="display:flex; gap:8px;">
+    <button type="button" id="edit" on:click={() => showEditForm = !showEditForm}>✎</button>
+    <p style="margin:0">{showEditForm ? 'Cancel Edit' : 'Edit Book'}</p>
+  </div>
 
-    <br/>
-    <div style="display:flex; gap:8px; align-items:center;">
-    <button on:click={simulateReadingOverTime}>Run Simulation</button>
-    <button on:click={stopSimulation}>Stop</button>
+  {#if showEditForm}
+    <div class="book-form">
+      {#if !editBook}
+        <input bind:value={searchTitle} placeholder="Search title to edit" />
+        <button on:click={loadBookForEditing}>Load Book</button>
+      {:else}
+        <input bind:value={editedTitle} placeholder="New Title" />
+        <input bind:value={editedGenre} placeholder="New Genre" />
+        <input bind:value={editedColor} placeholder="New Color" />
+        <input type="number" bind:value={editedPages} placeholder="New Pages" />
+        <input bind:value={editedISBN} placeholder="New ISBN" />
+        <button on:click={submitEdit}>Submit Changes</button>
+      {/if}
     </div>
-    <br/>
-    <br/>
-    <button on:click={goToDisplay}>Go to Data Display</button>
+  {/if}
+
+  <br/>
+  <div style="display:flex; gap:8px; align-items:center;">
+  <button on:click={simulateReadingOverTime}>Run Simulation</button>
+  <button on:click={stopSimulation}>Stop</button>
+  </div>
+  <br/>
+  <br/>
 </main>
 
 {#if showInfoModal}
@@ -281,7 +287,6 @@
         <li>
           <b>Run Simulation</b> → Starts the automated shelf visualization.
         </li>
-        <li><b>Go to Data Display</b> → Opens the analytics / metrics view.</li>
       </ul>
       <button class="close-btn" on:click={closeInfoModal}>Close</button>
     </div>
@@ -403,7 +408,7 @@ h1 {
   padding-bottom: 0.5rem;
 }
 
-/* === Control Panel === */
+/* === Control Panel === Unused currently
 .control-panel {
   background-color: #f5f2eb;
   color: #3A2322;
@@ -413,7 +418,7 @@ h1 {
   font-family: 'Georgia', serif;
   max-width: 400px;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
-}
+}*/
 
 /* === Modal Styles === */
 .modal-overlay {
