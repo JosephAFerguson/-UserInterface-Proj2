@@ -224,13 +224,6 @@
         width: 90%;
     }
 
-    .book-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0.8rem;
-        margin: 0 5%;
-    }
-
     .book-entry {
        background-color: #1a1a1a;
        padding: 0.9rem 1.2rem;

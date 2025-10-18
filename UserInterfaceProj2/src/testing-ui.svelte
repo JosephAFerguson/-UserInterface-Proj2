@@ -1,7 +1,7 @@
 <script>
   // Stores are passed in as props from `App.svelte` (they are Svelte writables)
   // Do not provide defaults here; App.svelte binds real writable store objects.
-  export let books_on_shelf;
+  import { books_on_shelf } from './lib/bookStore.js';
   export let books_off_shelf;
 
   // Local UI state
@@ -41,28 +41,6 @@
     alert('Eye button clicked!');
   }
 
-  // Add a sample new book to the on-shelf store
-  function addBook() {
-    books_on_shelf.update(books => [
-      ...books,
-      {
-        Title: 'New Book',
-        Color: 'Purple',
-        Genre: 'Fantasy',
-        Pages: 320,
-        Synopsis: 'A brand new story.',
-        DateAdded: new Date().toISOString().slice(0, 10),
-        LastRead: '',
-        TimesPulledOffShelf: 0
-      }
-    ]);
-  }
-
-  // Remove the last book from the on-shelf store
-  function removeBook() {
-    books_on_shelf.update(books => books.slice(0, -1));
-  }
-
   // Remove a book by title and move it to off-shelf
   function removeBookByTitle() {
     books_on_shelf.update(books => {
@@ -86,15 +64,15 @@
     books_on_shelf.update(books => [
       ...books,
       {
-        Title: newTitle || 'Untitled',
-        Genre: newGenre || 'Unknown',
-        Color: newColor || 'Gray',
-        Pages: parseInt(newPages) || 0,
-        ISBN: newISBN || 'N/A',
-        Synopsis: '',
+        Title: 'New Book',
+        Color: 'Purple',
+        Genre: 'Fantasy',
+        Pages: 320,
         DateAdded: new Date().toISOString().slice(0, 10),
         LastRead: '',
-        TimesPulledOffShelf: 0
+        TimesPulledOffShelf: 0,
+        shelf: 2,
+        spot: 5
       }
     ]);
 
