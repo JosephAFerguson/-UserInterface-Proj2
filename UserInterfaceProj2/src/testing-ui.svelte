@@ -269,7 +269,12 @@
         <input bind:value={newColor} placeholder="Color" />
         <input type="number" bind:value={newPages} placeholder="Pages" min="1" />
         <input bind:value={newISBN} placeholder="ISBN" />
-        <button on:click={submitNewBook(newTitle, newGenre, newColor, newPages, newISBN)}>Submit</button>
+        <button
+        on:click={() => submitNewBook(newTitle, newGenre, newColor, newPages, newISBN)}
+      >
+        Submit
+      </button>
+      
       </div>
     {/if}
   </div>
