@@ -1,9 +1,12 @@
 <script>
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
+  import { books_on_shelf, books_off_shelf } from './bookStore.js';
 
   export let color = "#916A2F";   // spine color
   export let title = "Untitled";  // book title
+  export let shelf = null;        // optional: 1-based shelf index
+  export let spot = null;         // optional: 1-based spot index
   export let width = 38;
   export let height = 110;
   export let stripHeight = 2     // top/bottom strips
@@ -12,7 +15,39 @@
   let textEl;
 
   function handleClick() {
-    alert('click');
+    // If shelf and spot are provided, remove the exact book at that location.
+    if (shelf != null && spot != null) {
+      if (!confirm(`Remove book at shelf ${shelf}, spot ${spot} and move to off-shelf?`)) return;
+      books_on_shelf.update(list => {
+        const idx = list.findIndex(b =>
+          b &&
+          Number(b.shelf) === Number(shelf) &&
+          Number(b.spot) === Number(spot)
+        );
+        if (idx === -1) return list;
+        const updated = [...list];
+        const removed = updated.splice(idx, 1)[0];
+        if (removed) books_off_shelf.update(off => [...off, removed]);
+        return updated;
+      });
+      return;
+    }
+
+    const bookTitle = title || 'Untitled';
+    // nothing to do for placeholder titles
+    if (bookTitle === 'Untitled') return;
+
+    if (!confirm(`Remove "${bookTitle}" from the shelf and move to off-shelf?`)) return;
+
+    books_on_shelf.update(books => {
+      const idx = books.findIndex(b => (b.title || b.Title) === bookTitle);
+      if (idx === -1) return books;
+      const updated = [...books];
+      const removed = updated.splice(idx, 1)[0];
+      // add removed book to off-shelf
+      books_off_shelf.update(off => [...off, removed]);
+      return updated;
+    });
   }
 
   onMount(() => {
