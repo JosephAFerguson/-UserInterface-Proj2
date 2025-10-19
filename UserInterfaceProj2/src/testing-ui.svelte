@@ -138,7 +138,7 @@
         return updatedBooks;
       });
     }
-  }, 3000); //every 3 seconds (for demo)
+  }, 1000); //every 3 seconds (for demo)
   }
 
   function stopSimulation() {
@@ -336,7 +336,6 @@
 <style>
 /* === Layout and General === */
 main {
-  padding: 2rem;
   margin: 0;
 }
 

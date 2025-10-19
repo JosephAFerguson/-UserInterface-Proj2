@@ -57,7 +57,7 @@
         <div class="books">
           {#each shelf as book, bIdx}
             {#if book}
-              <BookSVG book={book} title={book.title} color={book.color} shelf={sIdx+1} spot={bIdx+1} />
+              <BookSVG title={book.title} color={book.color} shelf={sIdx+1} spot={bIdx+1} />
             {:else}
               <!-- svelte-ignore a11y_click_events_have_key_events -->
               <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
@@ -77,6 +77,7 @@
 
 {#if showAddModal}
   <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="modal-overlay" on:click={closeAddModal}>
     <div class="modal-window" on:click|stopPropagation>
       <h3>Add Book</h3>
@@ -87,7 +88,7 @@
         <input placeholder="Pages" type="number" bind:value={addPages} />
         <input placeholder="ISBN" bind:value={addISBN} />
       </div>
-      <div style="display:flex; gap:8px; justify-content:flex-end;">
+      <div class="modal-btns">
         <button on:click={closeAddModal}>Cancel</button>
         <button on:click={submitAddBook}>Add Book</button>
       </div>
@@ -98,8 +99,9 @@
 <style>
   main {
     background-color: #563232;
+    height: 95vh;
     color: white;
-    margin: 1rem;
+    margin: 2vh;
   }
   .shelves {
     display: grid;
@@ -120,13 +122,11 @@
     grid-template-columns: repeat(10, minmax(1%, 1fr));
     justify-self: center;
     justify-items: center;
-    padding: 1rem;
+    padding: 1vh;
   }
   
   .books img,
   .books :global(svg) {
-    height: 90%;
-    max-height: 90%;
     object-fit: contain;
   }
   
@@ -169,6 +169,19 @@
     min-width: 260px;
     max-width: 420px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  }
+  .modal-btns{
+    display: block;
+    justify-self: right;
+  }
+  .modal-btns button{
+    border: none;
+    border-radius: 12px;
+    background: #d8b4a0;
+    color: black;
+  }
+  .modal-btns button:hover{
+    cursor: pointer;
   }
   .book-form { display:flex; flex-direction:column; gap:8px; margin:0.5rem 0 1rem; }
   .book-form input { padding:8px; border-radius:6px; border:1px solid #ccc; }
