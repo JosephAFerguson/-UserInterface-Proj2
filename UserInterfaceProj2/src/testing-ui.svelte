@@ -59,30 +59,6 @@
 
     titleToRemove = '';
   }
-
-  // Submit a new book using the Add form fields
-  function submitNewBook() {
-    books_on_shelf.update(books => [
-      ...books,
-      {
-        Title: 'New Book',
-        Color: 'Purple',
-        Genre: 'Fantasy',
-        Pages: 320,
-        DateAdded: new Date().toISOString().slice(0, 10),
-        LastRead: '',
-        TimesPulledOffShelf: 0,
-        shelf: 2,
-        spot: 5
-      }
-    ]);
-
-    // Reset form
-    newTitle = newGenre = newColor = newISBN = '';
-    newPages = '';
-    showForm = false;
-  }
-
   // Load a book into the edit form by searching title
   function loadBookForEditing() {
     const book = $books_on_shelf.find(b => b.Title.toLowerCase() === searchTitle.toLowerCase());
@@ -179,6 +155,62 @@
 
 </script>
 
+<!-- exportable submit for on click -->
+<script context="module">
+  import { get } from 'svelte/store';
+  // avoid duplicate declaration with the instance script by aliasing the imports for module scope
+  import { books_on_shelf as books_on_shelf_store, books_off_shelf as books_off_shelf_store } from './lib/bookStore.js';
+
+  // layout constants (adjust if your shelf/spot counts differ)
+  const SHELVES = 4;
+  const SPOTS = 10;
+
+  function findNextOpenSlot(books) {
+    // build a quick occupancy map by 1-based shelf/spot
+    const occupied = new Set();
+    for (const b of books) {
+      if (b && b.shelf != null && b.spot != null) {
+        occupied.add(`${Number(b.shelf)}:${Number(b.spot)}`);
+      }
+    }
+
+    for (let s = 1; s <= SHELVES; s++) {
+      for (let p = 1; p <= SPOTS; p++) {
+        if (!occupied.has(`${s}:${p}`)) return { shelf: s, spot: p };
+      }
+    }
+    // fallback if full
+    return { shelf: null, spot: null };
+  }
+
+  // Submit a new book using the Add form fields
+  export function submitNewBook(title, genre, color, pages, isbn, shelf, spot) {
+    const current = get(books_on_shelf_store) || [];
+    const next = (shelf != null && spot != null)
+      ? { shelf: Number(shelf), spot: Number(spot) }
+      : findNextOpenSlot(current);
+
+    const targetShelf = next.shelf ?? 2;
+    const targetSpot = next.spot ?? 5;
+
+    books_on_shelf_store.update(books => [
+      ...books,
+      {
+        Title: title || 'Untitled',
+        Color: color || '#916A2F',
+        Genre: genre || '',
+        Pages: parseInt(pages) || 0,
+        DateAdded: new Date().toISOString().slice(0, 10),
+        LastRead: '',
+        TimesPulledOffShelf: 0,
+        shelf: targetShelf,
+        spot: targetSpot,
+        ISBN: (isbn == null ? '' : String(isbn)).trim()
+      }
+    ]);
+  }
+</script>
+
 <main class="control-panel">
   <br />
   <button id="eye-button" on:click={handleEyeClick}>
@@ -227,7 +259,7 @@
         <input bind:value={newColor} placeholder="Color" />
         <input type="number" bind:value={newPages} placeholder="Pages" min="1" />
         <input bind:value={newISBN} placeholder="ISBN" />
-        <button on:click={submitNewBook}>Submit</button>
+        <button on:click={submitNewBook(newTitle, newGenre, newColor, newPages, newISBN)}>Submit</button>
       </div>
     {/if}
   </div>
