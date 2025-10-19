@@ -166,7 +166,7 @@
 
 </script>
 
-<main>
+<main class="control-panel">
   <br />
   <button id="eye-button" on:click={handleEyeClick}>
     <img src="./public/eye.png" alt="Eye Icon" width="20" height="20" />
@@ -406,17 +406,19 @@ h1 {
   padding-bottom: 0.5rem;
 }
 
-/* === Control Panel === Unused currently
+
 .control-panel {
   background-color: #f5f2eb;
   color: #3A2322;
-  margin: 2rem;
-  padding: 2rem;
+  padding: 20px;
   border-radius: 1.5rem;
   font-family: 'Georgia', serif;
   max-width: 400px;
   box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
-}*/
+  max-height: 95vh;          
+  overflow-y: auto;          
+  scrollbar-width: thin;
+}
 
 /* === Modal Styles === */
 .modal-overlay {
