@@ -132,14 +132,26 @@
     if (simRunning) return;
     simRunning = true;
 
-    simInterval = setInterval(() => {
-      // @ts-ignore
+  //simulation: move books between shelves and update stats
+  simInterval = setInterval(() => {
+    const chance = Math.random();
+    if (chance < 0.3 && $books_on_shelf.length > 0) {
+      const index = Math.floor(Math.random() * $books_on_shelf.length);
+      const removed = $books_on_shelf[index];
+      books_on_shelf.update(b => b.filter((_, i) => i !== index));
+      books_off_shelf.update(b => [...b, removed]);
+    } else if (chance > 0.7 && $books_off_shelf.length > 0) {
+      const index = Math.floor(Math.random() * $books_off_shelf.length);
+      const restored = $books_off_shelf[index];
+      books_off_shelf.update(b => b.filter((_, i) => i !== index));
+      books_on_shelf.update(b => [...b, restored]);
+    } else {
       books_on_shelf.update(books => {
         if (books.length === 0) return books;
 
         const index = Math.floor(Math.random() * books.length);
         const updatedBooks = [...books];
-        const offset = Math.floor(Math.random() * 10); // up to 10 days
+        const offset = Math.floor(Math.random() * 10); //up to 10 dayss
 
         updatedBooks[index] = {
           ...updatedBooks[index],
@@ -149,7 +161,8 @@
 
         return updatedBooks;
       });
-    }, 1000); // every 1 second
+    }
+  }, 3000); //every 3 seconds (for demo)
   }
 
   function stopSimulation() {
@@ -255,8 +268,7 @@
 
   <br/>
   <div style="display:flex; gap:8px; align-items:center;">
-  <button on:click={simulateReadingOverTime}>Run Simulation</button>
-  <button on:click={stopSimulation}>Stop</button>
+  <button class:running={simRunning} on:click={simRunning ? stopSimulation : simulateReadingOverTime}>{simRunning ? 'Stop Simulation' : 'Run Simulation'}</button>
   </div>
   <br/>
   <br/>
@@ -508,14 +520,19 @@ h1 {
 }
 
 .profile-buttons button.selected {
-  background-color: #b38a74;
+  background-color: #7F9D84 !important;
   font-weight: bold;
   box-shadow: 0 0 0 2px #3A2322 inset;
-  color: #fff;
+  color: #fff !important;
 }
 
 .profile-buttons button {
   transition: all 0.2s ease;
+}
+
+button.running:not(#add):not(#remove):not(#edit):not(#eye-button):not(#info-button) {
+  background-color: #A14B3F!important;
+  color: white;
 }
 </style>
 
