@@ -3,6 +3,7 @@
   // Do not provide defaults here; App.svelte binds real writable store objects.
   import { books_on_shelf } from './lib/bookStore.js';
   import { user_profile, setProfile } from './lib/bookStore.js';
+  import digitalSketch from './lib/digitalsketch.png';
   export let books_off_shelf;
 
   // Local UI state
@@ -37,10 +38,19 @@
     showInfoModal = false;
   }
 
-  // Eye icon action (kept simple for testing)
+  // Eye icon action 
+
+ 
+  let showHybridModal = false;
+
   function handleEyeClick() {
-    alert('Eye button clicked!');
+    showHybridModal = true;
   }
+
+  function closeHybridModal() {
+    showHybridModal = false;
+  }
+
 
   // Remove a book by title and move it to off-shelf
   function removeBookByTitle() {
@@ -333,6 +343,43 @@
     </div>
   </div>
 {/if}
+
+
+
+<!-- Eye Button -->
+{#if showHybridModal}
+  <div
+    class="hybrid-overlay no-outline"
+    on:click={closeHybridModal}
+    on:keydown={(e) => e.key === "Escape" && closeHybridModal()}
+    role="button"
+    tabindex="0"
+  >
+    <div
+      class="hybrid-modal no-outline"
+      on:click|stopPropagation
+      on:keydown={(e) => e.key === "Escape" && closeHybridModal()}
+      role="button"
+      tabindex="0"
+    >
+      <h2>Smart Bookshelf Concept Sketch</h2>
+      <img
+        src={digitalSketch}
+        alt="Hybrid sketch showing how the smart bookshelf integrates physical and digital features"
+        class="hybrid-image"
+      />
+      <p>
+        This concept sketch illustrates the smart bookshelf in its physical form.
+        The shelf displays books, and the left panel adds a digital screen with
+        stats and control buttons. 
+      </p>
+      <button class="close-btn" on:click={closeHybridModal}>Close</button>
+    </div>
+  </div>
+{/if}
+
+
+
 <style>
 /* === Layout and General === */
 main {
@@ -565,5 +612,84 @@ button.running:not(#add):not(#remove):not(#edit):not(#eye-button):not(#info-butt
   background-color: #A14B3F!important;
   color: white;
 }
+
+
+
+/*Shelf Modal */
+.hybrid-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+  }
+
+  .hybrid-modal {
+    background: #fff;
+    padding: 32px;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  }
+
+  .hybrid-modal h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+  }
+
+  .hybrid-image {
+  width: 65%;        
+  max-width: 220px;  
+  height: auto;      
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  margin: 10px auto 20px;
+  display: block;
+}
+
+  .hybrid-modal p {
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .close-btn {
+    background-color: #8B4513;
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    background-color: #73400f;
+  }
+
+  /* === Remove Yellow Focus Outlines === */
+  .no-outline,
+  .no-outline:focus,
+  .no-outline:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Keep subtle focus ring for keyboard users */
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid #38bdf8;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
 </style>
 
