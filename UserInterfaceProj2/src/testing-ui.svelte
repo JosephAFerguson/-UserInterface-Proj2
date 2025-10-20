@@ -170,7 +170,6 @@
   import { get } from 'svelte/store';
   // avoid duplicate declaration with the instance script by aliasing the imports for module scope
   import { books_on_shelf as books_on_shelf_store, books_off_shelf as books_off_shelf_store } from './lib/bookStore.js';
-
   // layout constants (adjust if your shelf/spot counts differ)
   const SHELVES = 4;
   const SPOTS = 10;
@@ -269,7 +268,17 @@
         <input bind:value={newColor} placeholder="Color" />
         <input type="number" bind:value={newPages} placeholder="Pages" min="1" />
         <input bind:value={newISBN} placeholder="ISBN" />
-        <button on:click={() =>submitNewBook(newTitle, newGenre, newColor, newPages, newISBN)}>Submit</button>
+        <button on:click={() => {
+          submitNewBook(newTitle, newGenre, newColor, newPages, newISBN);
+          showForm = false;
+          newTitle = '';
+          newGenre = '';
+          newColor = '';
+          newPages = '';
+          newISBN = '';
+        }}>
+          Submit
+        </button>
       </div>
     {/if}
   </div>
@@ -282,7 +291,11 @@
   {#if showRemoveForm}
     <div class="book-form">
       <input bind:value={titleToRemove} placeholder="Title to remove" />
-      <button on:click={removeBookByTitle}>Remove by Title</button>
+      <button on:click={() => {
+        removeBookByTitle();
+        showRemoveForm = false;
+        titleToRemove = '';
+      }}>Remove by Title</button>
     </div>
   {/if}
   <br>
