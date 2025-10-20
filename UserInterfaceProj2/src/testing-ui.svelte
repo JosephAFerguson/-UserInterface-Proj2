@@ -388,6 +388,7 @@
 main {
   margin: 0;
   height: 100vh;
+  overflow-y: auto;
 }
 
 .control-panel {
@@ -698,6 +699,32 @@ button.running:not(#add):not(#remove):not(#edit):not(#eye-button):not(#info-butt
     outline-offset: 3px;
     border-radius: 6px;
   }
+
+   /* Scrollbar styling: make the panel scrollbar match the project's tan-on-dark palette */
+    :global(main) {
+        /* Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: #d8b4a0 #f5f2eb; /* thumb, track */
+    }
+
+    /* WebKit-based browsers (Chrome, Edge, Safari) */
+    :global(main::-webkit-scrollbar) {
+        width: 10px;
+        height: 10px;
+    }
+    :global(main::-webkit-scrollbar-track) {
+        background: #f5f2eb;
+        border-radius: 10px;
+    }
+    :global(main::-webkit-scrollbar-thumb) {
+        background-color: #d8b4a0;
+        border-radius: 10px;
+        border: 2px solid transparent; /* gives a small gap */
+        background-clip: padding-box;
+    }
+    :global(main::-webkit-scrollbar-thumb:hover) {
+        background-color: #c4a28f;
+    }
 
 </style>
 
