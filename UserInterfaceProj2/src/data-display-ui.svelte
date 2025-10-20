@@ -1,9 +1,22 @@
 <script>
-    import { books_on_shelf, books_off_shelf } from './lib/bookStore.js';
+    import { books_on_shelf, books_off_shelf, search_query } from './lib/bookStore.js';
+    import { onDestroy } from 'svelte';
 
     let shelfView = 'all';
     let sortOption = 'None';
+
     let searchQuery = '';
+
+    // subscribe once to keep local input in sync with the store
+    const unsubscribe = search_query.subscribe(v => {
+        searchQuery = v ?? '';
+    });
+    onDestroy(unsubscribe);
+
+    // update the store on user input
+    function handleSearchInput(e) {
+        search_query.set(e.target.value);
+    }
 
     $: $books_on_shelf;
     $: $books_off_shelf;
@@ -80,7 +93,7 @@
         <br/>
         <h1>Search Features</h1>
         <br/>
-        <input type="text" placeholder="Search.." id="search" bind:value={searchQuery} />
+        <input type="text" placeholder="Search.." id="search" bind:value={searchQuery} on:input={handleSearchInput} />
         <br/>
         <br/>
         <div style="display: flex; gap:8px; height: 40px; align-items: center;">

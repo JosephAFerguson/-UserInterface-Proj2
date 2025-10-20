@@ -1,7 +1,7 @@
 // src/lib/bookStore.js
 import { writable, derived } from 'svelte/store';
 export const user_profile = writable(1);
-
+export const search_query = writable('');
 export const books_on_shelf_profiles = {
   1: [
   {

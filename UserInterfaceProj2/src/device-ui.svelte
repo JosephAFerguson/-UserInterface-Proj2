@@ -1,5 +1,5 @@
 <script>
-  import { books_per_shelf } from './lib/bookStore.js';
+  import { books_per_shelf, search_query } from './lib/bookStore.js';
   import BookSVG from './lib/SvgBook.svelte';
   import SvgLight from './lib/SvgLight.svelte';
   import NullBook from './assets/NullBook.svg';
@@ -67,7 +67,11 @@
         </div>
         <div class="lights">
           {#each shelf as book}
-            <SvgLight color={book ? 'white' : 'gray'} character={book ? book.title.charAt(0) : '-'} />
+            <SvgLight 
+              color={book ? 'white' : 'gray'} 
+              character={book ? book.title.charAt(0) : '-'} 
+              active={book && $search_query && book.title.toLowerCase().includes($search_query.toLowerCase())}
+            />
           {/each}
         </div>
       </div>
