@@ -269,7 +269,7 @@
         <input bind:value={newColor} placeholder="Color" />
         <input type="number" bind:value={newPages} placeholder="Pages" min="1" />
         <input bind:value={newISBN} placeholder="ISBN" />
-        <button on:click={submitNewBook(newTitle, newGenre, newColor, newPages, newISBN)}>Submit</button>
+        <button on:click={() =>submitNewBook(newTitle, newGenre, newColor, newPages, newISBN)}>Submit</button>
       </div>
     {/if}
   </div>
@@ -331,15 +331,16 @@
       role="button"
       tabindex="0"
     >
-      <h2>Testing UI – Button Guide</h2>
-      <ul>
-        <li><b>Add Books</b> → Adds new books to the smart shelf.</li>
-        <li><b>Remove Books</b> → Removes selected books from the shelf.</li>
-        <li>
-          <b>Run Simulation</b> → Starts the automated shelf visualization.
-        </li>
-      </ul>
-      <button class="close-btn" on:click={closeInfoModal}>Close</button>
+    <h2>Smart Shelf – Quick Controls</h2>
+    <ul>
+      <li><b>Add Book</b> → Click the add button or hover an empty spot to add a book.</li>
+      <li><b>Remove Book</b> → Click the remove button or click a book to remove it.</li>
+      <li><b>Edit Book</b> → Update any book’s info directly.</li>
+      <li><b>Run Simulation</b> → Watch how the shelf behaves in real time.</li>
+      <li><b>Eye Button</b> → View a sketch of the physical smart shelf.</li>
+      <li><b>User Profiles</b> → Switch between profiles to view shelf data.</li>
+    </ul>
+    <button class="close-btn" on:click={closeInfoModal}>Close</button>
     </div>
   </div>
 {/if}
@@ -510,7 +511,7 @@ h1 {
   scrollbar-width: thin;
 }
 
-/* === Modal Styles === */
+/* info Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -528,33 +529,37 @@ h1 {
 .modal-window {
   background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
   color: #1a1a1a;
-  padding: 32px;
-  border-radius: 20px;
-  max-width: 480px;
+  padding: 28px;
+  border-radius: 18px;
+  max-width: 440px;
   width: 90%;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 .modal-window h2 {
   text-align: center;
-  margin: 0 0 24px 0;
-  font-size: 28px;
+  margin: 0 0 16px 0;
+  font-size: 22px;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #3a2322;
+  border-bottom: 2px solid #d8b4a0;
+  padding-bottom: 8px;
 }
 
 .modal-window ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 28px 0;
+  margin: 0 0 18px 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
 .modal-window li {
-  margin: 0 0 16px 0;
-  padding: 16px 20px;
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 12px;
-  line-height: 1.6;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  line-height: 1.4;
   display: flex;
   align-items: center;
 }
@@ -566,25 +571,27 @@ h1 {
 .modal-window li b {
   color: #8B4513;
   font-weight: 600;
-  min-width: 140px;
+  min-width: 110px;
 }
 
 .close-btn {
   display: block;
   margin: 0 auto;
-  padding: 14px 32px;
+  padding: 10px 24px;
   background: #8B4513;
   color: #fff;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
+  transition: background 0.2s ease-in-out;
 }
 
 .close-btn:hover {
   background-color: #73400f;
 }
+
 
 .profile-section {
   margin-bottom: 1rem;
