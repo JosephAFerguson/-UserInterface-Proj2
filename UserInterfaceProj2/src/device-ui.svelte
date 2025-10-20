@@ -129,6 +129,11 @@
   .books :global(svg) {
     object-fit: contain;
   }
+
+  .books img {
+    height: 90%;
+    filter: grayscale(100%) brightness(70%);
+  }
   
   .books :global(svg):hover,
   .books img:hover {

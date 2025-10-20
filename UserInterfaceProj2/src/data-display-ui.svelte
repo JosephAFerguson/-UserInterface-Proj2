@@ -211,6 +211,7 @@
     #data-display-panel {
         height: 95vh;
         overflow-y: auto;
+
         padding: 20px;
         margin: 5% 6%;
         background-color: black;
@@ -276,6 +277,32 @@
         font-weight: normal;
         font-size: 0.85rem;
         color: #888;
+    }
+
+    /* Scrollbar styling: make the panel scrollbar match the project's tan-on-dark palette */
+    :global(#data-display-panel) {
+        /* Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: #d8b4a0 #0f0f0f; /* thumb, track */
+    }
+
+    /* WebKit-based browsers (Chrome, Edge, Safari) */
+    :global(#data-display-panel::-webkit-scrollbar) {
+        width: 10px;
+        height: 10px;
+    }
+    :global(#data-display-panel::-webkit-scrollbar-track) {
+        background: #0f0f0f;
+        border-radius: 10px;
+    }
+    :global(#data-display-panel::-webkit-scrollbar-thumb) {
+        background-color: #d8b4a0;
+        border-radius: 10px;
+        border: 2px solid transparent; /* gives a small gap */
+        background-clip: padding-box;
+    }
+    :global(#data-display-panel::-webkit-scrollbar-thumb:hover) {
+        background-color: #c4a28f;
     }
 
 </style>
