@@ -387,6 +387,17 @@ main {
   margin: 0;
 }
 
+.control-panel {
+  background-color: #f5f2eb;
+  color: #3A2322;
+  padding: 20px;
+  border-radius: 1.5rem;
+  font-family: 'Georgia', serif;
+  max-width: 400px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+  max-height: 95vh;          
+}
+
 :global(html), :global(body) {
   background-color: #f5f2eb; /* parchment tone */
   margin: 0;
@@ -497,19 +508,6 @@ h1 {
   padding-bottom: 0.5rem;
 }
 
-
-.control-panel {
-  background-color: #f5f2eb;
-  color: #3A2322;
-  padding: 20px;
-  border-radius: 1.5rem;
-  font-family: 'Georgia', serif;
-  max-width: 400px;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
-  max-height: 95vh;          
-  overflow-y: auto;          
-  scrollbar-width: thin;
-}
 
 /* info Modal Styles */
 .modal-overlay {
