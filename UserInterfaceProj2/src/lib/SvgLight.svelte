@@ -3,6 +3,7 @@
 
   export let color = "white";   // circle fill
   export let character = "A";   // character to display
+  export let active = false;    // whether to highlight the light
 
   let fontSize = 12;            // initial font size
   let textEl;
@@ -25,7 +26,13 @@
 
 <svg width="25" height="25" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
   <!-- Circle -->
-  <circle cx="10" cy="10" r={radius} stroke="black" fill={color} />
+  <circle 
+    cx="10" 
+    cy="10" 
+    r={radius} 
+    fill={active ? 'yellow' : color} 
+    stroke= 'black'
+  />
 
   <!-- Centered character -->
   <text
