@@ -91,12 +91,12 @@
 
 
         <br/>
-        <h1>Search Features</h1>
-        <br/>
+        <h1>Search</h1>
+
         <input type="text" placeholder="Search.." id="search" bind:value={searchQuery} on:input={handleSearchInput} />
         <br/>
         <br/>
-        <div style="display: flex; gap:8px; height: 40px; align-items: center;">
+        <!-- <div style="display: flex; gap:8px; height: 40px; align-items: center;">
             <p>Sort by:</p>
             <select bind:value={sortOption}>
                 <option value="None">None</option>
@@ -104,7 +104,7 @@
                 <option value="Z-A">Z-A</option>
                 <option value="Genre">Genre</option>
             </select>
-        </div>
+        </div> -->
 
         <h1>Status</h1>
         <div class="shelf-toggle">
@@ -209,6 +209,7 @@
         height: 100vh;
         overflow: hidden;
         box-sizing: border-box;
+        font-family: helvetica;
     }
 
     h1, .section-heading {
