@@ -185,7 +185,7 @@ export const books_on_shelf_profiles = {
   {
     Title: "Batman: Year One",
     Genre: "Comic",
-    Color: "#000000",
+    Color: "#d1c410ff",
     Pages: 100,
     DateAdded: "2021-08-12",
     LastRead: "2023-03-20",

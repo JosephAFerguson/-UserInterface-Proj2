@@ -387,6 +387,7 @@
 /* === Layout and General === */
 main {
   margin: 0;
+  height: 100vh;
 }
 
 .control-panel {
