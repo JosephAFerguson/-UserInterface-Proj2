@@ -4,6 +4,8 @@
   import { books_on_shelf } from './lib/bookStore.js';
   import { user_profile, setProfile } from './lib/bookStore.js';
   import digitalSketch from './lib/digitalsketch.png';
+  import eyeIcon from './lib/eye.png';
+  import infoIcon from './lib/information-button.png';
   export let books_off_shelf;
 
   // Local UI state
@@ -224,11 +226,11 @@
 <main class="control-panel">
   <br />
   <button id="eye-button" on:click={handleEyeClick}>
-    <img src="./public/eye.png" alt="Eye Icon" width="20" height="20" />
+    <img src={eyeIcon} alt="Eye Icon" width="20" height="20" />
   </button>
   <button id="info-button" on:click={handleInfoButtonClick}>
     <img
-      src="./public/information-button.png"
+      src={infoIcon}
       alt="Info Icon"
       width="20"
       height="20"
