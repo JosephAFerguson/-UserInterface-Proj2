@@ -8,6 +8,7 @@ To see documentation go to [Project Documentation and download it](https://githu
 <img width="846" height="591" alt="image" src="https://github.com/user-attachments/assets/807e7470-c8e9-4516-82f7-a6cc1c8e5f8b" />
 <img width="893" height="692" alt="image" src="https://github.com/user-attachments/assets/8b694a74-23b5-46d1-943f-65f5f4293f23" />
 <img width="331" height="385" alt="image" src="https://github.com/user-attachments/assets/a54bffc4-7826-4c6e-908d-8012342538f9" />
+<img width="548" height="430" alt="image" src="https://github.com/user-attachments/assets/51196e44-3775-48b5-883d-22e6cb87f89e" />
 <img width="182" height="58" alt="image" src="https://github.com/user-attachments/assets/8ce2dd0a-54a3-4dd4-8c36-1b8f822dae96" />
 <img width="669" height="438" alt="image" src="https://github.com/user-attachments/assets/0687e156-a028-4aa1-bf37-250eebc21ed8" />
 <img width="180" height="45" alt="image" src="https://github.com/user-attachments/assets/79194c48-e222-41d2-81ef-6ebfd29624fa" />
