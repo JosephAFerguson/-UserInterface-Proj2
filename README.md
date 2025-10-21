@@ -22,6 +22,8 @@ To see documentation go to [Project Documentation and download it](https://githu
 <img width="677" height="707" alt="image" src="https://github.com/user-attachments/assets/9b662958-dfca-4199-a87f-e936c5afb95f" />
 <img width="686" height="429" alt="image" src="https://github.com/user-attachments/assets/4d238552-fae6-4154-827e-e7d645d1a58b" />
 
-https://github.com/JosephAFerguson/-UserInterface-Proj2
-https://jf-userinterfaceproj2.netlify.app/ 
+
+[REPO](https://github.com/JosephAFerguson/-UserInterface-Proj2)
+[Public Hosted Link](https://jf-userinterfaceproj2.netlify.app/)
+[Demo Video](https://github.com/JosephAFerguson/-UserInterface-Proj2/blob/main/UserInterfaceProj2-Demo.mkv)
 
