@@ -28,6 +28,10 @@ To see documentation go to [Project Documentation and download it](https://githu
 
 
 [REPO](https://github.com/JosephAFerguson/-UserInterface-Proj2)
+
 [Public Hosted Link](https://jf-userinterfaceproj2.netlify.app/)
+
 [Demo Video](https://github.com/JosephAFerguson/-UserInterface-Proj2/blob/main/UserInterfaceProj2-Demo.mkv)
+
+
 
