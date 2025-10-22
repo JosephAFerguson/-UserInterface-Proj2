@@ -1,4 +1,4 @@
-To see documentation go to [Project Documentation and download it](https://github.com/JosephAFerguson/-UserInterface-Proj2/blob/main/Proj2Documentation.docx)
+To see documentation in a better format go to [Project Documentation and download it](https://github.com/JosephAFerguson/-UserInterface-Proj2/blob/main/Proj2Documentation.docx)
 <img width="722" height="773" alt="image" src="https://github.com/user-attachments/assets/8cb670c4-e6e3-405c-88ea-dddf650ec930" />
 <img width="662" height="615" alt="image" src="https://github.com/user-attachments/assets/4b57c41d-2b8e-4271-9998-3d2cc827fbec" />
 <img width="665" height="802" alt="image" src="https://github.com/user-attachments/assets/cbda9a03-a255-48bf-bab8-75b7cf58b480" />
